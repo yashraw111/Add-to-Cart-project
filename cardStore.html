@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <style>
+        .cart-item {
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+            padding-bottom: 20px;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+        }
+        .cart-item img {
+            max-height: 250px;
+            object-fit: cover;
+        }
+        .cart-item h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        .cart-item ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .cart-item ul li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container my-5 p-3" id="output">
+
+    </div>
+    <script>
+        function showCart() {
+            const cart = JSON.parse(localStorage.getItem('cartList')) || [];
+            console.table(cart);
+            let result = "";
+
+            // if (cart.length === 0) {
+            //     result = `<div class="text-center"><h3>Your cart is empty</h3></div>`;
+            // } else {
+                cart.forEach((element, index) => {
+                    result += `
+                    <div class="row cart-item shadow-sm p-4 mb-4">
+                        <div class="col-lg-4 p-3">
+                            <img src="${element.imageUrl}" alt="${element.productName}" class="w-100" height ="600">
+                        </div>
+                        <div class="col-lg-8">
+                            <h3>${element.productName}</h3>
+                            <ul>
+                                <li><b>Price:</b> $${element.productPrice}</li>
+                                <li><b>Available:</b> ${element.count}</li>
+                                <li><b>Description:</b> ${element.productDescription}</li>
+                                <li><b>Total:</b> $${(element.productPrice * element.count).toFixed(2)}</li>
+                            </ul>
+                            <button class="btn btn-danger" onclick="trash(${index})">Remove</button>
+                            <button class="btn btn-primary" onclick="pyment(${index})">Pyment</button>
+                        </div>
+                    </div>`;
+                });
+            // }
+
+            document.querySelector('#output').innerHTML = result;
+        }
+
+        function trash(index) {
+            if (confirm("Do you want to delete this item?")) {
+                const cart = JSON.parse(localStorage.getItem('cartList')) || [];
+                cart.splice(index, 1);
+                localStorage.setItem('cartList', JSON.stringify(cart));
+                showCart();
+            }
+        }
+
+        showCart();
+    </script>
+</body>
+
+</html>
